@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const config = require("./config/config");
 const axios = require('axios');
 const validator = require('./config/validators');
+const collectLogs = require('./utils/collectLogs')
 
 const UIport = config.UIport;
 axios.defaults.baseURL = config.kartingServerPth;
@@ -32,12 +33,14 @@ app.post("/luigi", async (req, res) => {
       await axios.post("/immediateRun", req.body)
         .then((res) => {
           console.log(res.data);
+          
           resArray.push(`successfully added`);
         }).catch((err) => {
           console.log(err);
           resArray.push(`${err}`);
         })
     }
+    collectLogs(req.body.personIDsArray);
     res.json(resArray);
   }
 });

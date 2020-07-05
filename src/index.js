@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const config = require("./config/config");
 const axios = require('axios');
 const validator = require('./config/validators');
+const shortid = require('shortid');
 const collectLogs = require('./util/collectLogs')
 const failsDetector = require('./util/failsDetector')
 
@@ -31,10 +32,12 @@ app.post("/luigi", async (req, res) => {
     });
 
     if (validationCheckFlag) {
+      let runUID = shortid.generate();
+      req.body.uid = runUID;
       await axios.post("/immediateRun", req.body)
         .then(async (res) => {
           console.log(res.data);
-          let failsArray = await failsDetector(req.body.personIDsArray, req.body.dataSource);
+          let failsArray = await failsDetector(req.body.personIDsArray, req.body.dataSource, runUID);
           for(failRes of failsArray){
             resArray.push(failRes);
           }

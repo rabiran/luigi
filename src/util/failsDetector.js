@@ -3,9 +3,16 @@ const cityCheck = require('./automation/cityCheck')
 const collectLogs = require('./collectLogs')
 
 module.exports = async (identifiersArray, dataSource) => {
-    let logsTitles = await collectLogs(identifiersArray);
-    let responseArray;
-    for (id of identifiersArray) {
+    let responseArray = [];
+    for (idObj of identifiersArray) {
+        let logsTitles = await collectLogs(idObj);
+        fs.copy('/tmp/mydir', '/tmp/mynewdir', function (err) {
+            if (err) {
+              console.error(err);
+            } else {
+              console.log("success!");
+            }
+          });
 
         //TODO general automation
 
@@ -23,7 +30,7 @@ module.exports = async (identifiersArray, dataSource) => {
             case config.dataSources.lmn:
                 break;
             case config.dataSources.city:
-                responseArray.push(cityCheck( logsTitles , id ));
+                responseArray.push(await cityCheck( logsTitles , idObj.identityCard ));
                 break;
             default:
         }

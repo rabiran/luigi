@@ -1,4 +1,5 @@
 const logDetails = require('../logDetails');
+const fs = require('fs');
 
 module.exports = async (logs, personId) => {
     let areTagsMissing = false;
@@ -9,7 +10,7 @@ module.exports = async (logs, personId) => {
         }
     }
     
-    if (!areTagsMissing) {
+    if (!areTagsMissing && logs.length > 0) {
         fs.appendFileSync('luigiLogs.txt', `${personId}: the logs are- ${logs}`);
         return `there is a proplem thet we can't identefy with the peerson of this id - ${personId}.`
     }

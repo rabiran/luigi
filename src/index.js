@@ -3,8 +3,8 @@ const bodyParser = require("body-parser");
 const config = require("./config/config");
 const axios = require('axios');
 const validator = require('./config/validators');
-const collectLogs = require('./utils/collectLogs')
-const failsDetector = require('./utils/failsDetector')
+const collectLogs = require('./util/collectLogs')
+const failsDetector = require('./util/failsDetector')
 
 const UIport = config.UIport;
 axios.defaults.baseURL = config.kartingServerPth;
@@ -32,9 +32,9 @@ app.post("/luigi", async (req, res) => {
 
     if (validationCheckFlag) {
       await axios.post("/immediateRun", req.body)
-        .then((res) => {
+        .then(async (res) => {
           console.log(res.data);
-          let failsArray = failsDetector(req.body.personIDsArray, req.body.dataSource);
+          let failsArray = await failsDetector(req.body.personIDsArray, req.body.dataSource);
           for(failRes of failsArray){
             resArray.push(failRes);
           }

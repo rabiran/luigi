@@ -1,19 +1,13 @@
 const config = require('../config/config')
 const cityCheck = require('./automation/cityCheck')
 const collectLogs = require('./collectLogs')
+const copyFile = require('./copyFile')
 
 module.exports = async (identifiersArray, dataSource) => {
     let responseArray = [];
     for (idObj of identifiersArray) {
-        let logsTitles = await collectLogs(idObj);
-        fs.copy('/tmp/mydir', '/tmp/mynewdir', function (err) {
-            if (err) {
-              console.error(err);
-            } else {
-              console.log("success!");
-            }
-          });
-
+        let {logTitles, fileName} = await collectLogs(idObj);
+        copyFile(`${config.logsPath}/${fileName}`, `logs/${fileName}`);
         //TODO general automation
 
         switch (dataSource) {
@@ -30,7 +24,7 @@ module.exports = async (identifiersArray, dataSource) => {
             case config.dataSources.lmn:
                 break;
             case config.dataSources.city:
-                responseArray.push(await cityCheck( logsTitles , idObj.identityCard ));
+                responseArray.push(await cityCheck( logTitles , idObj.identityCard ));
                 break;
             default:
         }

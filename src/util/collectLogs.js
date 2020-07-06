@@ -2,11 +2,11 @@ const config = require("../config/config");
 const fs = require('fs');
 
 
-module.exports = async idObj => {
+module.exports = async (idObj, runUID) => {
     const path = config.logsPath;
     const files = fs.readdirSync(`${path}/`);
     const fileName = files.filter(
-                file => file.startsWith(idObj.identityCard)
+                file => file.startsWith(`${runUID}-${idObj.identityCard}`) 
             ).flat();
 
     let logTitles = [];

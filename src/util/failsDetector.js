@@ -3,7 +3,7 @@ const cityCheck = require('./automation/cityCheck')
 const collectLogs = require('./collectLogs')
 const copyFile = require('./copyFile')
 
-module.exports = async (identifiersArray, dataSource) => {
+module.exports = async (identifiersArray, dataSource, runUID) => {
     let responseArray = [];
     for (idObj of identifiersArray) {
         let {logTitles, fileName} = await collectLogs(idObj);

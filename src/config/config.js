@@ -14,4 +14,5 @@ module.exports = {
         mm: "mm_name",
         city: "city_name",
     },
+    kartoffelUrl: "http://localhost:3000",
 };

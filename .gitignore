@@ -79,3 +79,5 @@ kartoffelDotenvFile/.env
 
 # Config
 src/config/config.js
+src/config/authParams.js
+src/config/key.pem

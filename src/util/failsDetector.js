@@ -1,11 +1,11 @@
 const config = require('../config/config')
 const cityCheck = require('./automation/city_automation/missingTags')
-const generalAutomation = require('./automation/generalAutomation')
+const generalAutomation = require('./automation/general_automation/automationManager')
 const collectLogs = require('./collectLogs')
 const copyFile = require('./copyFile');
 const moment = require('moment');
 
-module.exports = async (identifiersArray, dataSource, runUID) => {
+module.exports = async (identifiersArray, dataSource, runUID, recordsArray) => {
     let responseArray = [];
     const date = moment(new Date()).format("YYYY-MM-DD");
     for (idObj of identifiersArray) {
@@ -14,7 +14,7 @@ module.exports = async (identifiersArray, dataSource, runUID) => {
         copyFile(`${config.logsPath}/${date}/${fileName}`, `log/karting_logs/${date}/`, fileName);
 
         //general automation
-        let tempResArray = await generalAutomation(personId, logTitles);
+        let tempResArray = await generalAutomation(personId, logTitles, recordsArray);
 
         switch (dataSource) {
             case config.dataSources.aka:
@@ -34,7 +34,7 @@ module.exports = async (identifiersArray, dataSource, runUID) => {
                 break;
             default:
         }
-        if( tempResArray == [] ) responseArray.push(`there is a proplem thet we can't identefy with the peerson.`);
+        if( tempResArray.length == 0 ) responseArray.push({ id: personId, info: `there is no proplem thet we can identefy with the person.`});
         else responseArray.push({ id: personId, info: tempResArray });
     }
     return responseArray;

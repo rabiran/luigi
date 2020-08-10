@@ -1,5 +1,10 @@
 const validator = require("../config/validators");
 
+/**
+ * 
+ * @param {Array} personIDsArray - object of { identityCard, personalNumber }
+ * @returns - object of isValid(bool) and resArray(details fo the problem)
+ */
 module.exports = (personIDsArray) => {
     let isValid = true;
     let resArray = [];

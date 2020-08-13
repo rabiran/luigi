@@ -4,16 +4,21 @@ const fs = require('fs');
 /**
  * 
  * @param {Object} idObj - an object of { identityCard, personalNumber, domainUser } 
- * @param {String} runUID - the unique id of the run that we have activated in karting
+ * @param {String} runUID - the unique id of the run that we activated in karting
  * @param {Date} date - the date of the run
  * @returns - array of the titels of the logs and the name of the logs file 
  */
 module.exports = async (idObj, runUID, date) => {
 	const path = `${config.logsPath}/${date}`;
 	const files = fs.readdirSync(`${path}/`);
-	const fileName = files.filter(
-				file => file.startsWith(`${runUID}-${idObj.identityCard}`)
+	let fileName = [];
+	for (const idField of Object.values(idObj)) {		
+		fileName = files.filter(
+			file => file.startsWith(`${runUID}-${idField}`)
 			);
+		if (fileName.length > 0)
+			break;
+	}
 
 	let logTitles = [];
 	if (fileName.length == 1) {

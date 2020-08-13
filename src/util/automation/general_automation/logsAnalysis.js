@@ -19,6 +19,7 @@ module.exports = async (logTitles) =>{
                     break;
                 case 'ERR_NOT_FOUND_IN_RAW_DATA':
                     resArray.push(`this person does not axist in the given data source`)
+                    break;
                 default:
                     break;
             }

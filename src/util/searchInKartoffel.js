@@ -8,13 +8,21 @@ const getToken = getTokenCreator(config.getTokenIntilize);
 const httpsAgent = new https.Agent({rejectUnauthorized: false});
 const axiosInstance = axios.create({httpsAgent});
 
-module.exports = async (id) => {
-    let returnedObj = await axiosInstance.get(`${config.kartoffelUrl}/api/persons/identifier/${id}`).catch(err => {
-        console.log('INFO: '+ err.message);
-    })
+module.exports = async (idObj) => {
+    let returnedObj;
+    if(idObj.identityCard || idObj.personalNumber){       
+        let id =  idObj.identityCard || idObj.personalNumber;
+        returnedObj = await axiosInstance.get(`${config.kartoffelUrl}/api/persons/identifier/${id}`).catch(err => {
+            console.log('INFO: '+ err.message);
+        })
+    } else if(idObj.domainUser){
+        returnedObj = await axiosInstance.get(`${config.kartoffelUrl}/api/persons/domainUser/${idObj.domainUser}`).catch(err => {
+            console.log('INFO: '+ err.message);
+        })
+    }
     if (returnedObj && returnedObj.status == 200) {
         return { data: returnedObj.data ,existInKartoffel: true };
     } else { 
-        return { messege: `the person doesn't exist in kartoffel`, existInKartoffel: false };
+        return { message: `the person doesn't exist in kartoffel`, existInKartoffel: false };
     }
 }

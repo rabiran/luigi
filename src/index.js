@@ -26,7 +26,6 @@ app.post("/luigi", async (req, res) => {
             await axios
             .post("/immediateRun", req.body)
             .then(async (res) => {
-                console.log(res.data);
                 resArray = await failsDetector(
                     req.body.personIDsArray,
                     req.body.dataSource,

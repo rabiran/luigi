@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 /**
- * copy the file of the logs from karting to our logs fol
+ * copy the file of the logs from karting to our logs folder
  * 
  * @param {String} sourceFolder - the path of the source folder
  * @param {String} destFolder - the path of the destination folder

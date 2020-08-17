@@ -1,13 +1,30 @@
 const config = require('../config/config')
-const cityCheck = require('./automation/cityCheck')
-const collectLogs = require('./collectLogs')
+const missingTags = require('./automation/city_automation/missingTags')
+const generalAutomation = require('./automation/general_automation/generalAutomationManager')
+const createLogFile = require('./createLogFile');
+const upnCheck = require('./automation/general_automation/upnCheck')
 
-module.exports = async (identifiersArray, dataSource) => {
-    let logsTitles = await collectLogs(identifiersArray);
-    let responseArray;
-    for (id of identifiersArray) {
-
-        //TODO general automation
+/**
+ * 
+ * @param {Array} identifiersArray - array of the id objects
+ * @param {String} dataSource - the data source of the objects
+ * @param {String} runUID - the unique id of the run that we activated in karting
+ * @param {Array} kartingInfo - array of all of the data that we recived from karting
+ * @returns - the resonse ready for the user
+ */
+module.exports = async (identifiersArray, dataSource, runUID, kartingInfo) => {
+    let responseArray = [];
+    for (idObj of identifiersArray) {
+        let { fileName, logs } = kartingInfo.find(obj =>  obj.id == idObj.identityCard || obj.id == idObj.personalNumber || obj.id ==idObj.domainUser).logsObj;
+        let personId = idObj.identityCard || idObj.personalNumber || idObj.domainUser;
+        
+        let logTitles = logs.map(line => {
+            return JSON.parse(line).title;
+        })
+        
+        //general automation
+        createLogFile(logs, fileName);
+        let tempResArray = await generalAutomation(idObj, logTitles);
 
         switch (dataSource) {
             case config.dataSources.aka:
@@ -15,18 +32,23 @@ module.exports = async (identifiersArray, dataSource) => {
             case config.dataSources.es:
                 break;
             case config.dataSources.ads:
+                tempResArray.push(await upnCheck(personId, kartingInfo ));
                 break;
             case config.dataSources.adNN:
+                tempResArray.push(await upnCheck(personId, kartingInfo));
                 break;
             case config.dataSources.mdn:
             case config.dataSources.mm:
             case config.dataSources.lmn:
                 break;
             case config.dataSources.city:
-                responseArray.push(cityCheck( logsTitles , id ));
+                tempResArray.push(await missingTags(logTitles, personId));
                 break;
             default:
         }
+        tempResArray = tempResArray.filter(elem => !Array.isArray(elem) || elem.length > 0)
+        if( tempResArray.length == 0 ) responseArray.push({ id: personId, info: `there is no proplem thet we can identefy with the person.`});
+        else responseArray.push({ id: personId, info: tempResArray.flat() });
     }
     return responseArray;
 }

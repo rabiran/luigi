@@ -5,7 +5,7 @@ module.exports = {
     UIport: 8310,
     luigiServerPath: 'http://localHost:8310',
     kartingServerPth: 'http://localHost:3002',
-    logsPath: '../karting/log/immediate_run',
+    logsFolderPath: 'log/karting_logs',
     dataSources: {
         aka: "aka",
         es: "es_name",

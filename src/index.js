@@ -29,7 +29,6 @@ app.post("/luigi", async (req, res) => {
                 resArray = await failsDetector(
                     req.body.personIDsArray,
                     req.body.dataSource,
-                    runUID, 
                     res.data
                 );
             })

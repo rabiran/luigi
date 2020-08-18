@@ -2,21 +2,23 @@ const config = require('../config/config')
 const missingTags = require('./automation/city_automation/missingTags')
 const generalAutomation = require('./automation/general_automation/generalAutomationManager')
 const createLogFile = require('./createLogFile');
-const upnCheck = require('./automation/general_automation/upnCheck')
+const upnCheck = require('./automation/ads_automation/upnCheck')
+const sAMAccountCheck = require('./automation/adNN_automation/sAMAccountCheck')
 
 /**
  * 
  * @param {Array} identifiersArray - array of the id objects
  * @param {String} dataSource - the data source of the objects
  * @param {String} runUID - the unique id of the run that we activated in karting
- * @param {Array} kartingInfo - array of all of the data that we recived from karting
+ * @param {Array} kartingObjArray - array of all of the data that we recived from karting
  * @returns - the resonse ready for the user
  */
-module.exports = async (identifiersArray, dataSource, runUID, kartingInfo) => {
+module.exports = async (identifiersArray, dataSource, kartingObjArray) => {
     let responseArray = [];
     for (idObj of identifiersArray) {
-        let { fileName, logs } = kartingInfo.find(obj =>  obj.id == idObj.identityCard || obj.id == idObj.personalNumber || obj.id ==idObj.domainUser).logsObj;
-        let personId = idObj.identityCard || idObj.personalNumber || idObj.domainUser;
+        let kartingObj = kartingObjArray.find(obj =>  obj.id == idObj.identityCard || obj.id == idObj.personalNumber || obj.id ==idObj.domainUser);
+        let { fileName, logs } = kartingObj.logsObj;
+        let personId = kartingObj.id;
         
         let logTitles = logs.map(line => {
             return JSON.parse(line).title;
@@ -32,10 +34,10 @@ module.exports = async (identifiersArray, dataSource, runUID, kartingInfo) => {
             case config.dataSources.es:
                 break;
             case config.dataSources.ads:
-                tempResArray.push(await upnCheck(personId, kartingInfo ));
+                tempResArray.push(await upnCheck(personId, kartingObj.record));
                 break;
             case config.dataSources.adNN:
-                tempResArray.push(await upnCheck(personId, kartingInfo));
+                tempResArray.push(await sAMAccountCheck(personId, kartingObj.record));
                 break;
             case config.dataSources.mdn:
             case config.dataSources.mm:

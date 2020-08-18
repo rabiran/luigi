@@ -34,10 +34,10 @@ module.exports = async (identifiersArray, dataSource, kartingObjArray) => {
             case config.dataSources.es:
                 break;
             case config.dataSources.ads:
-                tempResArray.push(await upnCheck(personId, kartingObj.record));
+                tempResArray.push(await upnCheck(personId, kartingObj.records));
                 break;
             case config.dataSources.adNN:
-                tempResArray.push(await sAMAccountCheck(personId, kartingObj.record));
+                tempResArray.push(await sAMAccountCheck(personId, kartingObj.records));
                 break;
             case config.dataSources.mdn:
             case config.dataSources.mm:

@@ -24,7 +24,7 @@ app.post("/luigi", async (req, res) => {
             let runUID = shortid.generate();
             req.body.uid = runUID;
             await axios
-            .post("/immediateRun", req.body)
+            .post("/immediateRun", req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
             .then(async (res) => {
                 resArray = await failsDetector(
                     req.body.personIDsArray,

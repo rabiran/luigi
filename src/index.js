@@ -9,7 +9,7 @@ const idValidation = require("./util/idValidation");
 require("dotenv").config();
 
 const UIport = config.UIport;
-axios.defaults.baseURL = config.kartingServerPth;
+axios.defaults.baseURL = config.kartingServerPath;
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,7 +24,7 @@ app.post("/luigi", async (req, res) => {
             let runUID = shortid.generate();
             req.body.uid = runUID;
             await axios
-            .post("/immediateRun", req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
+            .post(`/immediateRun`, req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
             .then(async (res) => {
                 resArray = await failsDetector(
                     req.body.personIDsArray,

@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const config = require("./config/config");
 const axios = require("axios");
-const shortid = require("shortid");
 const failsDetector = require("./util/failsDetector");
 const idValidation = require("./util/idValidation");
 
@@ -21,8 +20,6 @@ app.post("/luigi", async (req, res) => {
     } else {
         let { isValid, resArray } = idValidation(req.body.personIDsArray);
         if (isValid) {
-            let runUID = shortid.generate();
-            req.body.uid = runUID;
             await axios
             .post(`/immediateRun`, req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
             .then(async (res) => {

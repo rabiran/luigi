@@ -4,11 +4,11 @@ const config = require('../config/config')
 const getTokenCreator = require("spike-get-token");
 const getToken = getTokenCreator(config.getTokenIntilize);
 
-(async () => axios.defaults.headers.common['Authorization'] = await getToken())();
 const httpsAgent = new https.Agent({rejectUnauthorized: false});
 const axiosInstance = axios.create({httpsAgent});
 
 module.exports = async (idObj) => {
+    axiosInstance.defaults.headers.common['Authorization'] = await getToken();
     let returnedObj;
     if(idObj.identityCard || idObj.personalNumber){       
         let id =  idObj.identityCard || idObj.personalNumber;

@@ -5,6 +5,7 @@ const axios = require("axios");
 const shortid = require("shortid");
 const failsDetector = require("./util/failsDetector");
 const idValidation = require("./util/idValidation");
+const searchInKartoffel = require("./util/searchInKartoffel")
 
 require("dotenv").config();
 
@@ -23,13 +24,15 @@ app.post("/luigi", async (req, res) => {
         if (isValid) {
             let runUID = shortid.generate();
             req.body.uid = runUID;
-            await axios
-            .post(`/immediateRun`, req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
+            let kartoffelResultsArray = [];
+            for (const idObj of req.body.personIDsArray) kartoffelResultsArray.push(await searchInKartoffel(idObj));
+            await axios.post(`/immediateRun`, req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
             .then(async (res) => {
                 resArray = await failsDetector(
                     req.body.personIDsArray,
                     req.body.dataSource,
-                    res.data
+                    res.data, 
+                    kartoffelResultsArray
                 );
             })
             .catch((err) => {

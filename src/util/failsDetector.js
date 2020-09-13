@@ -11,12 +11,16 @@ const sAMAccountCheck = require('./automation/adNN_automation/sAMAccountCheck')
  * @param {String} dataSource - the data source of the objects
  * @param {String} runUID - the unique id of the run that we activated in karting
  * @param {Array} kartingObjArray - array of all of the data that we recived from karting
- * @returns - the resonse ready for the user
+ * @param {array} kartoffelResultsArray - array of the results from the kartoffel search
+ * @returns - the response ready for the user
  */
-module.exports = async (identifiersArray, dataSource, kartingObjArray) => {
+module.exports = async (identifiersArray, dataSource, kartingObjArray, kartoffelResultsArray) => {
     let responseArray = [];
     for (idObj of identifiersArray) {
         let kartingObj = kartingObjArray.find(obj =>  obj.id == idObj.identityCard || obj.id == idObj.personalNumber || obj.id ==idObj.domainUser);
+        let kartoffelObj = kartoffelResultsArray.find(
+            obj =>  obj.identityCard == idObj.identityCard || obj.personalNumber == idObj.personalNumber || obj.domainUsers.find(obj => uniqueID == idObj.domainUser)
+                );
         let { fileName, logs } = kartingObj.logsObj;
         let personId = kartingObj.id;
         
@@ -25,8 +29,9 @@ module.exports = async (identifiersArray, dataSource, kartingObjArray) => {
         })
         
         //general automation
-        createLogFile(logs, fileName);
-        let tempResArray = await generalAutomation(idObj, logTitles);
+        let { tempResArray, personUpdates} = await generalAutomation(idObj, logTitles, kartoffelObj, kartingObj);
+        
+        createLogFile(logs, fileName, kartingObj, personUpdates);
 
         switch (dataSource) {
             case config.dataSources.aka:

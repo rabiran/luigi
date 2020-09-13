@@ -9,7 +9,7 @@ const moment = require('moment');
  * @param {String} destFolder - the path of the destination folder
  * @param {String} fileName - the name of the file
  */
-module.exports = (logTitles, fileName) => {
+module.exports = (logTitles, fileName, record, personUpdates) => {
 	const date = moment(new Date()).format("YYYY-MM-DD");
 	let destFolder = `${config.logsFolderPath}/${date}/`;
 
@@ -17,7 +17,12 @@ module.exports = (logTitles, fileName) => {
 		fs.mkdirSync(destFolder);
 	}
 	if(fileName) {
-		fs.writeFileSync(`${destFolder}${fileName}`, logTitles.toString(), (err) => {
+		const filePrintedData = {
+			logs: logTitles,
+			record: record.records,
+			personUpdates: personUpdates,
+		}
+		fs.writeFileSync(`${destFolder}${fileName}`, JSON.stringify(filePrintedData), (err) => {
 			if (err) {
 				console.error(err);
 			} else {

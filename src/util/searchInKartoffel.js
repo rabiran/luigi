@@ -7,6 +7,11 @@ const getToken = getTokenCreator(config.getTokenIntilize);
 const httpsAgent = new https.Agent({rejectUnauthorized: false});
 const axiosInstance = axios.create({httpsAgent});
 
+/**
+ * 
+ * @param {object} idObj - the object of the id's that we have recieved from the user
+ * @returns- if the person exist in kartoffel - {data: (object), existInKartoffel: true}. if not {message: (string), existInKartoffel: false}
+ */
 module.exports = async (idObj) => {
     axiosInstance.defaults.headers.common['Authorization'] = await getToken();
     let returnedObj;

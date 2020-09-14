@@ -1,13 +1,20 @@
 const kartoffelObjDiff = require('./kartoffelObjDiff')
 const searchInKartoffel = require('../../searchInKartoffel');
+const createLogFile = require('../../createLogFile')
 
 module.exports = async (idObj, logTitles, personBeforeKartingRun) =>{
-    let personAfterKartingRun = await searchInKartoffel(idObj);
-    let personUpdates = await kartoffelObjDiff(personBeforeKartingRun, personAfterKartingRun)
     let tempResArray = [];
-        for (const title of logTitles) {
-            switch (title) {
-                case 'INF_ADD_PERSON_TO_KARTOFFEL':
+    let personAfterKartingRun;
+    let personUpdates;
+    for (const title of logTitles) {
+        switch (title) {
+            case 'INF_ADD_PERSON_TO_KARTOFFEL':
+                    personAfterKartingRun = await searchInKartoffel(idObj);
+                    let addedPersonLogObject = {
+                        identifier: idObj,
+                        kartoffelPersonId: personAfterKartingRun.data._id
+                    }
+                    createLogFile(addedPersonLogObject);
                     tempResArray.push(`the person now added to kartoffel`)
                     break;
                 case 'INF_ADD_DOMAIN_USER': 
@@ -20,7 +27,7 @@ module.exports = async (idObj, logTitles, personBeforeKartingRun) =>{
                     tempResArray.push(`the person hiererchy updatad`)
                     break;
                 case 'INF_UPDATE_PERSON_IN_KARTOFFEL':
-                    let personAfterKartingRun = await searchInKartoffel(idObj);
+                    personAfterKartingRun = await searchInKartoffel(idObj);
                     personUpdates = await kartoffelObjDiff(personBeforeKartingRun, personAfterKartingRun)
                     tempResArray.push(`the person has now udated`)
                     break;

@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const config = require("./config/config");
 const axios = require("axios");
+var cors = require('cors');
 const failsDetector = require("./util/failsDetector");
 const idValidation = require("./util/idValidation");
 
@@ -11,6 +12,8 @@ const UIport = config.UIport;
 axios.defaults.baseURL = config.kartingServerPath;
 
 const app = express();
+
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

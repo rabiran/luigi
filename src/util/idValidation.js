@@ -9,7 +9,7 @@ module.exports = (personIDsArray) => {
     let isValid = true;
     let resArray = [];
     personIDsArray.forEach(async (idObj) => {
-        if( !!idObj.identityCard && idObj.personalNumber == undefined && idObj.domainUser == undefined){
+        if(!idObj.identityCard && !idObj.personalNumber && !idObj.domainUser){
             resArray.push(`there isn't any valid input for this object- ${JSON.stringify(idObj)}`);
             isValid = false;
         }

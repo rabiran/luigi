@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const config = require("./config/config");
 const axios = require("axios");
+const shortid = require("shortid");
 var cors = require('cors');
 const failsDetector = require("./util/failsDetector");
 const idValidation = require("./util/idValidation");

@@ -9,7 +9,7 @@ module.exports = async (idObj, logTitles, personBeforeKartingRun) =>{
     for (const title of logTitles) {
         switch (title) {
             case 'INF_ADD_PERSON_TO_KARTOFFEL':
-                    personAfterKartingRun = await searchInKartoffel(idObj);
+                    personAfterKartingRun = await searchInKartoffel(idObj).data;
                     let addedPersonLogObject = {
                         identifier: idObj,
                         kartoffelPersonId: personAfterKartingRun.data._id

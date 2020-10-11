@@ -15,8 +15,8 @@ const axiosInstance = axios.create({httpsAgent});
 module.exports = async (idObj) => {
     axiosInstance.defaults.headers.common['Authorization'] = await getToken();
     let returnedObj;
+    let id =  idObj.identityCard || idObj.personalNumber || idObj.domainUser;
     if(idObj.identityCard || idObj.personalNumber){       
-        let id =  idObj.identityCard || idObj.personalNumber;
         returnedObj = await axiosInstance.get(`${config.kartoffelUrl}/api/persons/identifier/${id}`).catch(err => {
             console.log('INFO: '+ err.message);
         })
@@ -26,8 +26,8 @@ module.exports = async (idObj) => {
         })
     }
     if (returnedObj && returnedObj.status == 200) {
-        return { data: returnedObj.data ,existInKartoffel: true };
+        return { id: id, data: returnedObj.data ,existInKartoffel: true };
     } else { 
-        return { message: `the person doesn't exist in kartoffel`, existInKartoffel: false };
+        return { id: id, message: `the person doesn't exist in kartoffel`, existInKartoffel: false };
     }
 }

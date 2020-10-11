@@ -18,9 +18,7 @@ module.exports = async (identifiersArray, dataSource, kartingObjArray, kartoffel
     let responseArray = [];
     for (idObj of identifiersArray) {
         let kartingObj = kartingObjArray.find(obj =>  obj.id == idObj.identityCard || obj.id == idObj.personalNumber || obj.id ==idObj.domainUser);
-        let kartoffelObj = kartoffelResultsArray.find(
-            obj =>  obj.identityCard == idObj.identityCard || obj.personalNumber == idObj.personalNumber || obj.domainUsers.find(obj => uniqueID == idObj.domainUser)
-                );
+        let kartoffelObj = kartoffelResultsArray.find(obj =>  obj.id == idObj.identityCard || obj.id == idObj.personalNumber || obj.id == idObj.domainUser);
         let { fileName, logs } = kartingObj.logsObj;
         let personId = kartingObj.id;
         
@@ -29,7 +27,7 @@ module.exports = async (identifiersArray, dataSource, kartingObjArray, kartoffel
         })
         
         //general automation
-        let { tempResArray, personUpdates} = await generalAutomation(idObj, logTitles, kartoffelObj, kartingObj);
+        let { tempResArray, personUpdates} = await generalAutomation(idObj, logTitles, kartoffelObj.data, kartingObj);
         
         createLogFile(logs, fileName, kartingObj, personUpdates);
 

@@ -24,16 +24,11 @@ app.post("/luigi", async (req, res) => {
     } else {
         let { isValid, resArray } = idValidation(req.body.personIDsArray);
         if (isValid) {
-<<<<<<< HEAD
-            await axios
-            .post(`/luigiRun`, req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
-=======
             let runUID = shortid.generate();
             req.body.uid = runUID;
             let kartoffelResultsArray = [];
             for (const idObj of req.body.personIDsArray) kartoffelResultsArray.push(await searchInKartoffel(idObj));
             await axios.post(`/immediateRun`, req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
->>>>>>> efb0f3802a07a8bfa580863ee750e461e5688944
             .then(async (res) => {
                 resArray = await failsDetector(
                     req.body.personIDsArray,

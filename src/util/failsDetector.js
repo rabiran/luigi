@@ -29,7 +29,7 @@ module.exports = async (identifiersArray, dataSource, kartingObjArray, kartoffel
         })
         
         //general automation
-        let { tempResArray, personUpdates} = await generalAutomation(idObj, logTitles, kartoffelObj, kartingObj);
+        let { tempResArray, personUpdates } = await generalAutomation(idObj, logTitles, kartoffelObj, kartingObj);
         
         createLogFile(logs, fileName, kartingObj, personUpdates);
 

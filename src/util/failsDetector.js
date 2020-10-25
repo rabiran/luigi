@@ -52,8 +52,14 @@ module.exports = async (identifiersArray, dataSource, kartingObjArray, kartoffel
             default:
         }
         tempResArray = tempResArray.filter(elem => !Array.isArray(elem) || elem.length > 0)
-        if( tempResArray.length == 0 ) responseArray.push({ id: personId, info: `there is no problem thet we can identify with the person.`});
-        else responseArray.push({ id: personId, info: tempResArray.flat() });
+        if( tempResArray.length == 0 ) {
+            tempResArray = [`there is no problem thet we can identify with the person.`];
+        }
+        else {
+            tempResArray = tempResArray.flat()
+        }
+        responseArray.push({ id: personId, info: tempResArray});
+        
     }
     return responseArray;
 }

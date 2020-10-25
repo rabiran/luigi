@@ -32,7 +32,7 @@ module.exports = async (idObj, logTitles, personBeforeKartingRun) =>{
                     tempResArray.push(`the person has now udated`)
                     break;
                 // case 'ERR_NOT_FOUND_IN_RAW_DATA':
-                //     tempResArray.push(`this person does not axist in the given data source`)
+                //     tempResArray.push(`this person does not exist in the given data source`)
                 //     break;
                 default:
                     break;

@@ -19,6 +19,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(express.static('./client/build'))
+
 app.post("/luigi", async (req, res) => {
     if (!req.body.personIDsArray || !req.body.dataSource) {
         res.json("the fields you sent are empty");
@@ -46,5 +48,9 @@ app.post("/luigi", async (req, res) => {
         res.json(resArray);
     }
 });
+
+app.get("/dataSources",  (req, res) => {
+    res.send(config.dataSources)
+})
 
 app.listen(UIport, () => console.log("luigi server run on port:" + UIport));

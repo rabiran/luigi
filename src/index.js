@@ -49,8 +49,8 @@ app.post("/luigi", async (req, res) => {
     }
 });
 
-app.get("/dataSources",  (req, res) => {
-    res.send(config.dataSources)
+app.get("/dataSourcesNames",  (req, res) => {
+    res.send(config.dataSourcesNames)
 })
 
 app.listen(UIport, () => console.log("luigi server run on port:" + UIport));

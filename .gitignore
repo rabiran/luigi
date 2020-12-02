@@ -81,3 +81,6 @@ kartoffelDotenvFile/.env
 src/config/config.js
 src/config/authParams.js
 src/config/key.pem
+
+# Client build folder
+client

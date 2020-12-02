@@ -3,8 +3,10 @@ const bodyParser = require("body-parser");
 const config = require("./config/config");
 const axios = require("axios");
 const shortid = require("shortid");
+var cors = require('cors');
 const failsDetector = require("./util/failsDetector");
 const idValidation = require("./util/idValidation");
+const searchInKartoffel = require("./util/searchInKartoffel")
 
 require("dotenv").config();
 
@@ -12,6 +14,8 @@ const UIport = config.UIport;
 axios.defaults.baseURL = config.kartingServerPath;
 
 const app = express();
+
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -23,13 +27,15 @@ app.post("/luigi", async (req, res) => {
         if (isValid) {
             let runUID = shortid.generate();
             req.body.uid = runUID;
-            await axios
-            .post(`/immediateRun`, req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
+            let kartoffelResultsArray = [];
+            for (const idObj of req.body.personIDsArray) kartoffelResultsArray.push(await searchInKartoffel(idObj));
+            await axios.post(`/immediateRun`, req.body, {headers: { 'authorization' : process.env.KARTING_TOKEN}})
             .then(async (res) => {
                 resArray = await failsDetector(
                     req.body.personIDsArray,
                     req.body.dataSource,
-                    res.data
+                    res.data, 
+                    kartoffelResultsArray
                 );
             })
             .catch((err) => {

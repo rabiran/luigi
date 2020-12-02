@@ -2,10 +2,11 @@ const authParams = require('./authParams')
 const path = require("path");
 
 module.exports = {
-    UIport: 8310,
+    UIport: 9191,
     luigiServerPath: 'http://localHost:8310',
     kartingServerPath: 'http://localHost:3002',
-    logsFolderPath: 'log/karting_logs',
+    kartingLogsFolderPath: 'log/karting_logs',
+    luigiLogsFolderPath: 'log/added_to_kartoffel',
     dataSources: {
         aka: "aka",
         es: "es_name",

@@ -21,6 +21,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('./client/build'))
 
+app.get('/isalive', (req, res) => {
+    if(req.url === "/isalive") {
+        res.send('alive')
+    }
+})
+
 app.post("/luigi", async (req, res) => {
     if (!req.body.personIDsArray || !req.body.dataSource) {
         res.json("the fields you sent are empty");
